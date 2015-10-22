@@ -1,0 +1,14 @@
+{
+  "name": "generator-html5-wechat-activity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "victor",
+  "license": "ISC",
+  "dependencies": {
+    "yeoman-generator": "^0.20.3"
+  }
+}
