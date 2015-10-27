@@ -1,7 +1,5 @@
 var generators = require('yeoman-generator');
 var path = require('path');
-// var util = require('util');
-// var fs = require('fs');
 
 module.exports = generators.Base.extend({
 
@@ -50,6 +48,16 @@ module.exports = generators.Base.extend({
                 message: 'choices you like js lib',
                 choices: ['jquery', 'zeptojs'],
                 default: 'zeptojs'
+            }, {
+                type: 'checkbox',
+                name: 'plugins',
+                message: 'choices js plugins',
+                choices: [{
+                    name: 'pageSwitch',
+                    val: 'pageSwitch',
+                    checked: true
+                }],
+                default: 'pageSwitch'
             }
             // gulp 配置是否用一个文件模式
         ], function(answers) {
@@ -57,10 +65,20 @@ module.exports = generators.Base.extend({
             this.userconfig.cssResetLib = answers.cssResetLib;
             this.userconfig.jsLib = answers.jsLib;
             this.userconfig.style = answers.style;
+
+            if (answers.plugins.indexOf('pageSwitch') > -1)
+                this.userconfig.pageSwitch = true;
+            else
+                this.userconfig.pageSwitch = false;
+
+            console.log(this.userconfig.pageSwitch)
+
             done();
         }.bind(this));
     },
-    configuring: {},
+    configuring: {
+
+    },
 
     default: {},
     writing: {
@@ -100,6 +118,12 @@ module.exports = generators.Base.extend({
                         this.destinationPath(this.userconfig.resetcssLink)
                     );
                     break;
+                default:
+                    this.userconfig.resetcssLink = './assets/css/myrest.css';
+                    this.fs.copyTpl(
+                        this.templatePath(this.userconfig.resetcssLink),
+                        this.destinationPath(this.userconfig.resetcssLink)
+                    );
             }
         },
         initJS: function() {
@@ -167,12 +191,21 @@ module.exports = generators.Base.extend({
         },
 
         inptPkg: function() {
-        	var projectName = this.userconfig.projectName;
+            var projectName = this.userconfig.projectName;
             this.fs.copyTpl(
                 this.templatePath('./package.json'),
                 this.destinationPath('./package.json'), {
                     projectName: projectName
                 }
+            );
+        },
+
+        bowerJson: function() {
+            var config = this.userconfig;
+            this.fs.copyTpl(
+                this.templatePath('./bower.json'),
+                this.destinationPath('./bower.json'),
+                config
             );
         }
     },
@@ -180,7 +213,12 @@ module.exports = generators.Base.extend({
     install: function() {
         this.log('install');
         // this.npmInstall(['lodash'], { 'saveDev': true });
-        // this.bowerInstall(['jquery'], {'save': true });
+        // this.bowerInstall([
+        //     'jquery',
+        //     'https://github.com/qiqiboy/pageSwitch.git'
+        // ], {
+        //     'save': true
+        // });
 
         // this.installDependencies();
     },
