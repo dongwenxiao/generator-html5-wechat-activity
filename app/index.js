@@ -109,45 +109,36 @@ module.exports = generators.Base.extend({
         generateProject: function() {},
         initCss: function() {
             switch (this.userconfig.style) {
-                default:
-                    case 'css':
-                    this.userconfig.cssLink = './assets/css/style.css';
-                this.fs.copyTpl(
-                    this.templatePath('./assets/css/css/style.css'),
-                    this.destinationPath(this.userconfig.cssLink)
-                );
-                break;
+                // TODO: use less and sass
                 case 'less':
-                        break;
+                    break;
                 case 'sass':
-                        break;
+                    break;
+                case 'css':
+                default:
+                    this.userconfig.cssLink = './assets/css/style.css';
+                    this.fs.copyTpl(
+                        this.templatePath('./assets/css/css/style.css'),
+                        this.destinationPath(this.userconfig.cssLink)
+                    );
+                    break;
             }
 
             switch (this.userconfig.cssResetLib) {
                 case 'reset.css':
-                    this.userconfig.resetcssLink = './assets/css/resetcss-yui-3.18.1.min.css';
-                    this.fs.copyTpl(
-                        this.templatePath(this.userconfig.resetcssLink),
-                        this.destinationPath(this.userconfig.resetcssLink)
-                    );
+                    this.userconfig.resetCss = this.userconfig.cssResetLib == "reset.css";
+                    this.userconfig.resetcssLink = './bower_components/HTML5-Reset/assets/css/reset.css';
                     break;
                 case 'normalize.css':
-                    this.userconfig.resetcssLink = './assets/css/normalize-3.0.2.css';
-                    this.fs.copyTpl(
-                        this.templatePath(this.userconfig.resetcssLink),
-                        this.destinationPath(this.userconfig.resetcssLink)
-                    );
+                    this.userconfig.normalizeCss = this.userconfig.cssResetLib == "normalize.css";
+                    this.userconfig.resetcssLink = './bower_components/normalize-css/normalize.css';
                     break;
                 default:
-                    this.userconfig.resetcssLink = './assets/css/myrest.css';
-                    this.fs.copyTpl(
-                        this.templatePath(this.userconfig.resetcssLink),
-                        this.destinationPath(this.userconfig.resetcssLink)
-                    );
+                    this.userconfig.resetcssLink = '';
             }
         },
         initJS: function() {
-            /// move to bower
+            // move to bower
             switch (this.userconfig.jsLib) {
                 case 'jquery':
                     this.userconfig.jsLibLink = './bower_components/jquery/dist/jquery.min.js';
@@ -156,12 +147,12 @@ module.exports = generators.Base.extend({
                     this.userconfig.jsLibLink = './bower_components/zeptojs/src/zepto.js';
                     break;
                 default:
-                    // none
+                    // select none 
                     this.userconfig.jsLibLink = '';
                     break;
             }
 
-            ///
+            // 
             this.userconfig.jsLink = './assets/js/script.js';
             this.fs.copyTpl(
                 this.templatePath('./assets/js/js/script.js'),
@@ -243,7 +234,9 @@ module.exports = generators.Base.extend({
                     zeptojs: config.jsLib == 'zeptojs',
                     jquery: config.jsLib == 'jquery',
                     pageSwitch: config.pageSwitch,
-                    qjs: config.qjs
+                    qjs: config.qjs,
+                    normalizeCss: config.normalizeCss,
+                    resetCss: config.resetCss
                 }
             );
         }

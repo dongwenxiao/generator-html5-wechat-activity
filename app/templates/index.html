@@ -8,7 +8,9 @@
 	<meta name="description" content="">
 	<title><%= title %></title>
 	<!-- build:css assets/css/lib.min.css -->
+	<% if(resetcssLink != ''){%>
 	<link rel="stylesheet" type="text/css" href="<%= resetcssLink %>">
+	<% }%>
 	<link rel="stylesheet" type="text/css" href="<%= cssLink %>">
 	<!-- endbuild -->
 </head>
@@ -22,9 +24,11 @@
 <%if(jsLibLink != ''){%>
 <script src="<%= jsLibLink %>"></script>
 <%}%>
-<script src="<%= jsLink %>"></script>
 
 <% if(jsWxShare){ %>
 <script src="./assets/js/wx-share.js"></script>
 <% }%>
+
+<script src="<%= jsLink %>"></script>
+
 <!-- endbuild -->

@@ -34,5 +34,14 @@
         <% if(qjs) { %>
         ,"qjs": "https://github.com/kriskowal/q.git#1.4.1"
         <% } %>
+
+        <% if(normalizeCss) { %>
+        ,"normalize-css": "normalize.css#~3.0.3"
+        <% } %>
+
+        <% if(resetCss) { %>
+        ,"HTML5-Reset": "html5-reset#~2.1.3"
+        <% } %>
+        
     }
 }
