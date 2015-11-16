@@ -7,8 +7,6 @@ module.exports = generators.Base.extend({
 
     constructor: function() {
         generators.Base.apply(this, arguments);
-
-        // this.sourceRoot(path.join(__dirname, 'app'));
     },
 
     initializing: function() {
@@ -17,6 +15,7 @@ module.exports = generators.Base.extend({
             required: false
         });
     },
+
     prompting: function() {
         // get current dir name
         var dirParts = process.cwd().split('\\');
@@ -24,54 +23,79 @@ module.exports = generators.Base.extend({
 
         var done = this.async();
         this.prompt([{
-                type: 'input',
-                name: 'projectName',
-                message: 'your project name',
-                default: this.appname || currentDirName
-            },
-            /* {
-                            type: 'list',
-                            name: 'style',
-                            message: 'choices you like style',
-                            choices: ['css', 'less', 'sass'],
-                            default: 'css'
-                        }, */
-            {
-                type: 'list',
-                name: 'cssResetLib',
-                message: 'choices you like css reset function',
-                choices: ['reset.css', 'normalize.css', 'none'],
-                default: 'normalize.css'
+            type: 'input',
+            name: 'projectName',
+            message: 'your project name',
+            default: this.appname || currentDirName
+        }, {
+            type: 'list',
+            name: 'cssResetLib',
+            message: 'choices you like css reset function',
+            choices: ['reset.css', 'normalize.css', 'none'],
+            default: 'normalize.css'
+        }, {
+            type: 'list',
+            name: 'jsLib',
+            message: 'choices you like js lib',
+            choices: ['jquery', 'zeptojs'],
+            default: 'zeptojs'
+        }, {
+            type: 'checkbox',
+            name: 'plugins',
+            message: 'choices js plugins',
+            choices: [{
+                name: 'pageSwitch',
+                val: 'pageSwitch',
+                checked: true
             }, {
-                type: 'list',
-                name: 'jsLib',
-                message: 'choices you like js lib',
-                choices: ['jquery', 'zeptojs'],
-                default: 'zeptojs'
+                name: 'Q',
+                val: 'qjs',
+                checked: false
             }, {
-                type: 'checkbox',
-                name: 'plugins',
-                message: 'choices js plugins',
-                choices: [{
-                    name: 'pageSwitch',
-                    val: 'pageSwitch',
-                    checked: true
-                }],
-                default: 'pageSwitch'
-            }
-            // gulp 配置是否用一个文件模式
-        ], function(answers) {
+                name: 'wxShare',
+                val: 'wxShare',
+                checked: true
+            }],
+            default: 'pageSwitch'
+        }, {
+            type: 'checkbox',
+            name: 'page',
+            message: 'choices page config',
+            choices: [{
+                name: 'pageLoading',
+                val: 'pageLoading',
+                checked: true
+            }, {
+                name: 'screenRotateTip',
+                val: 'screenRotateTip',
+                checked: true
+            }]
+        }], function(answers) {
             this.userconfig.projectName = answers.projectName;
             this.userconfig.cssResetLib = answers.cssResetLib;
             this.userconfig.jsLib = answers.jsLib;
             this.userconfig.style = answers.style;
 
-            if (answers.plugins.indexOf('pageSwitch') > -1)
-                this.userconfig.pageSwitch = true;
-            else
-                this.userconfig.pageSwitch = false;
+            function check(all, item) {
+                if (all.indexOf(item) > -1)
+                    return true;
+                return false;
+            }
 
-            console.log(this.userconfig.pageSwitch)
+            // use PageSwitch lib
+            this.userconfig.pageSwitch = check(answers.plugins, 'pageSwitch');
+
+            // use Q js file
+            this.userconfig.qjs = check(answers.plugins, 'qjs');
+
+            // wechat share api js
+            this.userconfig.wxShare = check(answers.plugins, 'wxShare');
+
+            // page loading
+            this.userconfig.pageLoading = check(answers.page, 'pageLoading');
+
+            // page screen rotate tip
+            this.userconfig.screenRotateTip = check(answers.page, 'screenRotateTip');
 
             done();
         }.bind(this));
@@ -83,10 +107,8 @@ module.exports = generators.Base.extend({
     default: {},
     writing: {
         generateProject: function() {
-            // this.log('writing generateProject')
-            // this.copy('hello.txt', process.cwd() + '/hello.txt');
-        },
 
+        },
         initCss: function() {
             switch (this.userconfig.style) {
                 default:
@@ -127,7 +149,6 @@ module.exports = generators.Base.extend({
             }
         },
         initJS: function() {
-
             ///
             switch (this.userconfig.jsLib) {
                 case 'jquery':
@@ -146,7 +167,6 @@ module.exports = generators.Base.extend({
                     break;
             }
 
-
             ///
             this.userconfig.jsLink = './assets/js/script.js';
             this.fs.copyTpl(
@@ -154,14 +174,35 @@ module.exports = generators.Base.extend({
                 this.destinationPath(this.userconfig.jsLink)
             );
 
+            // 
+            if (this.userconfig.wxShare) {
+                this.fs.copyTpl(
+                    this.templatePath('./assets/js/wx-share.js'),
+                    this.destinationPath('./assets/js/wx-share.js')
+                );
+            }
         },
-
+        initImg: function() {
+            this.fs.copyTpl(
+                this.templatePath('./assets/img/'),
+                this.destinationPath('./assets/img/')
+            );
+        },
+        initAudio: function() {
+            this.fs.copyTpl(
+                this.templatePath('./assets/audio/'),
+                this.destinationPath('./assets/audio/')
+            );
+        },
         initHtml: function() {
             var projectName = this.userconfig.projectName,
                 resetcssLink = this.userconfig.resetcssLink,
                 cssLink = this.userconfig.cssLink,
                 jsLibLink = this.userconfig.jsLibLink,
                 jsLink = this.userconfig.jsLink;
+
+            var config = this.userconfig;
+                
 
             this.fs.copyTpl(
                 this.templatePath('index.html'),
@@ -170,11 +211,11 @@ module.exports = generators.Base.extend({
                     resetcssLink: resetcssLink,
                     cssLink: cssLink,
                     jsLibLink: jsLibLink,
-                    jsLink: jsLink
+                    jsLink: jsLink,
+                    jsWxShare: config.wxShare
                 }
             );
         },
-
         initGulp: function() {
             // this.fs.copyTpl(
             //     this.templatePath('./gulpfile.js'),
@@ -189,7 +230,6 @@ module.exports = generators.Base.extend({
                 }
             );
         },
-
         inptPkg: function() {
             var projectName = this.userconfig.projectName;
             this.fs.copyTpl(

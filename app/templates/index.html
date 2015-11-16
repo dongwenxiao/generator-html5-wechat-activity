@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+	<meta name="format-tetection" content="telephone=no,email=no,address=no">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
 	<title><%= title %></title>
 	<!-- build:css assets/css/lib.min.css -->
 	<link rel="stylesheet" type="text/css" href="<%= resetcssLink %>">
@@ -9,10 +13,16 @@
 	<!-- endbuild -->
 </head>
 <body>
-	
+	<div class="container"></div>
+	<div class="loading"></div>
+	<div class="screen-rotate-tip"></div>
 </body>
 </html>
 <!-- build:js assets/js/lib.min.js -->
 <script src="<%= jsLibLink %>"></script>
 <script src="<%= jsLink %>"></script>
+
+<% if(jsWxShare){ %>
+<script src="./assets/js/wx-share.js"></script>
+<% }%>
 <!-- endbuild -->
