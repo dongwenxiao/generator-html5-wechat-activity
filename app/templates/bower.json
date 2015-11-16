@@ -1,28 +1,38 @@
 {
-  "name": "<%= projectName %>",
-  "description": "",
-  "main": "index.js",
-  "authors": [
-    "cs_victor <cs_victor@126.com>"
-  ],
-  "license": "ISC",
-  "moduleType": [
-    "amd"
-  ],
-  "homepage": "",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    <% if(pageSwitch) { %>
-    "pageSwitch": "https://github.com/qiqiboy/pageSwitch.git",
-    <% } %>
-    <% if(qjs) { %>
-    "qjs": "https://github.com/kriskowal/q.git#1.4.1",
-    <% } %>
-  }
+    "name": "<%= projectName %>",
+    "description": "",
+    "main": "index.js",
+    "authors": [
+        "cs_victor <cs_victor@126.com>"
+    ],
+    "license": "ISC",
+    "moduleType": [
+        "amd"
+    ],
+    "homepage": "",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+
+        <% if(zeptojs) {%>
+        "zeptojs": "~1.1.6"
+        <% } %>
+
+        <% if(jquery) {%>
+        "jquery": "~2.1.4"
+        <% } %>
+
+        <% if(pageSwitch) { %>
+        ,"pageSwitch": "https://github.com/qiqiboy/pageSwitch.git"
+        <% } %>
+
+        <% if(qjs) { %>
+        ,"qjs": "https://github.com/kriskowal/q.git#1.4.1"
+        <% } %>
+    }
 }

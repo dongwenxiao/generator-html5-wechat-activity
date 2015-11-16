@@ -19,7 +19,9 @@
 </body>
 </html>
 <!-- build:js assets/js/lib.min.js -->
+<%if(jsLibLink != ''){%>
 <script src="<%= jsLibLink %>"></script>
+<%}%>
 <script src="<%= jsLink %>"></script>
 
 <% if(jsWxShare){ %>

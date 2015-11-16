@@ -37,7 +37,7 @@ module.exports = generators.Base.extend({
             type: 'list',
             name: 'jsLib',
             message: 'choices you like js lib',
-            choices: ['jquery', 'zeptojs'],
+            choices: ['zeptojs', 'jquery', 'none'],
             default: 'zeptojs'
         }, {
             type: 'checkbox',
@@ -106,9 +106,7 @@ module.exports = generators.Base.extend({
 
     default: {},
     writing: {
-        generateProject: function() {
-
-        },
+        generateProject: function() {},
         initCss: function() {
             switch (this.userconfig.style) {
                 default:
@@ -149,21 +147,17 @@ module.exports = generators.Base.extend({
             }
         },
         initJS: function() {
-            ///
+            /// move to bower
             switch (this.userconfig.jsLib) {
                 case 'jquery':
-                    this.userconfig.jsLibLink = './assets/js/jquery-2.1.4.min.js';
-                    this.fs.copyTpl(
-                        this.templatePath(this.userconfig.jsLibLink),
-                        this.destinationPath(this.userconfig.jsLibLink)
-                    );
+                    this.userconfig.jsLibLink = './bower_components/jquery/dist/jquery.min.js';
                     break;
                 case 'zeptojs':
-                    this.userconfig.jsLibLink = './assets/js/zepto-1.0rc.min.js';
-                    this.fs.copyTpl(
-                        this.templatePath(this.userconfig.jsLibLink),
-                        this.destinationPath(this.userconfig.jsLibLink)
-                    );
+                    this.userconfig.jsLibLink = './bower_components/zeptojs/src/zepto.js';
+                    break;
+                default:
+                    // none
+                    this.userconfig.jsLibLink = '';
                     break;
             }
 
@@ -202,7 +196,7 @@ module.exports = generators.Base.extend({
                 jsLink = this.userconfig.jsLink;
 
             var config = this.userconfig;
-                
+
 
             this.fs.copyTpl(
                 this.templatePath('index.html'),
@@ -244,8 +238,13 @@ module.exports = generators.Base.extend({
             var config = this.userconfig;
             this.fs.copyTpl(
                 this.templatePath('./bower.json'),
-                this.destinationPath('./bower.json'),
-                config
+                this.destinationPath('./bower.json'), {
+                    projectName: config.projectName,
+                    zeptojs: config.jsLib == 'zeptojs',
+                    jquery: config.jsLib == 'jquery',
+                    pageSwitch: config.pageSwitch,
+                    qjs: config.qjs
+                }
             );
         }
     },
