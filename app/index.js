@@ -157,7 +157,7 @@ module.exports = generators.Base.extend({
             }
 
             // css lib 
-            this.userconfig.animateCssLink = this.userconfig.animateCss ? this.userconfig.animateCss './bower_components/animate.css/animate.min.css' : '';
+            this.userconfig.animateCssLink = this.userconfig.animateCss ? './bower_components/animate.css/animate.min.css' : '';
         },
         initJS: function() {
             // move to bower
@@ -184,10 +184,18 @@ module.exports = generators.Base.extend({
             // 
             if (this.userconfig.wxShare) {
                 this.fs.copyTpl(
-                    this.templatePath('./assets/js/wx-share.js'),
+                    this.templatePath('./assets/js/js/wx-share.js'),
                     this.destinationPath('./assets/js/wx-share.js')
                 );
             }
+
+            //
+            this.userconfig.preloadLibLink = './bower_components/html5Preloader.js/js/html5Preloader.js';
+            this.userconfig.preloadLink = './assets/js/preload.js';
+            this.fs.copyTpl(
+                this.templatePath('./assets/js/js/preload.js'),
+                this.destinationPath('./assets/js/preload.js')
+            );
         },
         initImg: function() {
             this.fs.copyTpl(
@@ -217,9 +225,12 @@ module.exports = generators.Base.extend({
                     title: projectName,
                     resetcssLink: resetcssLink,
                     cssLink: cssLink,
+                    animateCssLink: config.animateCssLink,
                     jsLibLink: jsLibLink,
                     jsLink: jsLink,
-                    jsWxShare: config.wxShare
+                    jsWxShare: config.wxShare,
+                    preloadLibLink: config.preloadLibLink,
+                    preloadLink: config.preloadLink
                 }
             );
         },

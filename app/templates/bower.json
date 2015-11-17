@@ -19,12 +19,15 @@
     ],
     "dependencies": {
 
+        "html5Preloader.js": "https://github.com/codemonkey-victor/html5Preloader.js.git#cde87ce"
+
+
         <% if(zeptojs) {%>
-        "zeptojs": "~1.1.6"
+        ,"zeptojs": "~1.1.6"
         <% } %>
 
         <% if(jquery) {%>
-        "jquery": "~2.1.4"
+        ,"jquery": "~2.1.4"
         <% } %>
 
         <% if(pageSwitch) { %>
