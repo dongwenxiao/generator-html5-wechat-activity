@@ -34,6 +34,16 @@ module.exports = generators.Base.extend({
             choices: ['reset.css', 'normalize.css', 'none'],
             default: 'normalize.css'
         }, {
+            type: 'checkbox',
+            name: 'cssLib',
+            message: 'choices you like css lib',
+            choices: [{
+                name: 'animate.css',
+                val: 'animate.css',
+                checked: true
+            }],
+            default: 'animate.css'
+        }, {
             type: 'list',
             name: 'jsLib',
             message: 'choices you like js lib',
@@ -71,9 +81,11 @@ module.exports = generators.Base.extend({
                 checked: true
             }]
         }], function(answers) {
+
             this.userconfig.projectName = answers.projectName;
             this.userconfig.cssResetLib = answers.cssResetLib;
             this.userconfig.jsLib = answers.jsLib;
+            this.userconfig.cssLib = answers.cssLib;
             this.userconfig.style = answers.style;
 
             function check(all, item) {
@@ -97,7 +109,11 @@ module.exports = generators.Base.extend({
             // page screen rotate tip
             this.userconfig.screenRotateTip = check(answers.page, 'screenRotateTip');
 
+            // animation.css
+            this.userconfig.animateCss = check(answers.cssLib, 'animate.css');
+
             done();
+
         }.bind(this));
     },
     configuring: {
@@ -108,6 +124,8 @@ module.exports = generators.Base.extend({
     writing: {
         generateProject: function() {},
         initCss: function() {
+
+            // css script
             switch (this.userconfig.style) {
                 // TODO: use less and sass
                 case 'less':
@@ -124,6 +142,7 @@ module.exports = generators.Base.extend({
                     break;
             }
 
+            // css reset lib
             switch (this.userconfig.cssResetLib) {
                 case 'reset.css':
                     this.userconfig.resetCss = this.userconfig.cssResetLib == "reset.css";
@@ -136,6 +155,9 @@ module.exports = generators.Base.extend({
                 default:
                     this.userconfig.resetcssLink = '';
             }
+
+            // css lib 
+            this.userconfig.animateCssLink = this.userconfig.animateCss ? this.userconfig.animateCss './bower_components/animate.css/animate.min.css' : '';
         },
         initJS: function() {
             // move to bower
@@ -236,7 +258,8 @@ module.exports = generators.Base.extend({
                     pageSwitch: config.pageSwitch,
                     qjs: config.qjs,
                     normalizeCss: config.normalizeCss,
-                    resetCss: config.resetCss
+                    resetCss: config.resetCss,
+                    animateCss: config.animateCss
                 }
             );
         }
