@@ -1,8 +1,10 @@
 var generators = require('yeoman-generator');
 var path = require('path');
+var util = require('./util');
 
 module.exports = generators.Base.extend({
 
+    // use to save user config
     userconfig: {},
 
     constructor: function() {
@@ -27,6 +29,12 @@ module.exports = generators.Base.extend({
             name: 'projectName',
             message: 'your project name',
             default: this.appname || currentDirName
+        }, {
+            type: 'list',
+            name: 'style',
+            message: 'choices you like css write function(TODO)',
+            choices: ['css', 'less', 'sass'],
+            default: 'css'
         }, {
             type: 'list',
             name: 'cssResetLib',
@@ -54,28 +62,27 @@ module.exports = generators.Base.extend({
             name: 'plugins',
             message: 'choices js plugins',
             choices: [{
+                // 翻页效果
                 name: 'pageSwitch',
                 val: 'pageSwitch',
                 checked: true
-            }, {
-                name: 'Q',
-                val: 'qjs',
+            }, { // Q js
+                name: 'Q js',
+                val: 'Q js',
                 checked: false
-            }, {
+            }, { // 微信分享
                 name: 'wxShare',
                 val: 'wxShare',
                 checked: true
-            }],
-            default: 'pageSwitch'
-        }, {
-            type: 'checkbox',
-            name: 'page',
-            message: 'choices page config',
-            choices: [{
-                name: 'pageLoading',
-                val: 'pageLoading',
+            }, { // 百度统计
+                name: 'baiduAnalysis',
+                val: 'baiduAnalysis',
+                checked: false
+            }, { // 资源预加载
+                name: 'preload',
+                val: 'preload',
                 checked: true
-            }, {
+            }, { // 屏幕旋转提示
                 name: 'screenRotateTip',
                 val: 'screenRotateTip',
                 checked: true
@@ -83,37 +90,52 @@ module.exports = generators.Base.extend({
         }], function(answers) {
 
             this.userconfig.projectName = answers.projectName;
-            this.userconfig.cssResetLib = answers.cssResetLib;
-            this.userconfig.jsLib = answers.jsLib;
-            this.userconfig.cssLib = answers.cssLib;
+
+            // stylesheet write function TODO: css/less/sass
             this.userconfig.style = answers.style;
 
-            function check(all, item) {
-                if (all.indexOf(item) > -1)
-                    return true;
-                return false;
+            // css reset lib
+            this.userconfig.useResetCss = false;
+            this.userconfig.useNormalizeCss = false;
+            switch (answers.cssResetLib) {
+                case 'reset.css':
+                    this.userconfig.useResetCss = true;
+                    break;
+                case 'normalize.css':
+                    this.userconfig.useNormalizeCss = true;
+                    break;
+                default:
+                    break;
+            }
+            // css lib choose
+            this.userconfig.useAnimateCss = util.checkContain(answers.cssLib, 'animate.css');
+
+            // js lib choose
+            this.userconfig.useZeptoJs = false;
+            this.userconfig.useJquery = false;
+            switch (answers.jsLib) {
+                case 'zeptojs':
+                    this.userconfig.useZeptoJs = true;
+                    break;
+                case 'jquery':
+                    this.userconfig.useJquery = true;
+                    break;
+                default:
+                    break;
             }
 
-            // use PageSwitch lib
-            this.userconfig.pageSwitch = check(answers.plugins, 'pageSwitch');
+            // js plugin choose
 
-            // use Q js file
-            this.userconfig.qjs = check(answers.plugins, 'qjs');
+            console.log(answers)
 
-            // wechat share api js
-            this.userconfig.wxShare = check(answers.plugins, 'wxShare');
-
-            // page loading
-            this.userconfig.pageLoading = check(answers.page, 'pageLoading');
-
-            // page screen rotate tip
-            this.userconfig.screenRotateTip = check(answers.page, 'screenRotateTip');
-
-            // animation.css
-            this.userconfig.animateCss = check(answers.cssLib, 'animate.css');
+            this.userconfig.usePageSwitch = util.checkContain(answers.plugins, 'pageSwitch');
+            this.userconfig.useQjs = util.checkContain(answers.plugins.toString().toLowerCase(), 'q js');
+            this.userconfig.useWxShare = util.checkContain(answers.plugins, 'wxShare');
+            this.userconfig.useBaiduAnalysis = util.checkContain(answers.plugins, 'baiduAnalysis');
+            this.userconfig.usePreload = util.checkContain(answers.plugins, 'preload');
+            this.userconfig.useScreenRotateTip = util.checkContain(answers.plugins, 'screenRotateTip');
 
             done();
-
         }.bind(this));
     },
     configuring: {
@@ -142,60 +164,16 @@ module.exports = generators.Base.extend({
                     break;
             }
 
-            // css reset lib
-            switch (this.userconfig.cssResetLib) {
-                case 'reset.css':
-                    this.userconfig.resetCss = this.userconfig.cssResetLib == "reset.css";
-                    this.userconfig.resetcssLink = './bower_components/HTML5-Reset/assets/css/reset.css';
-                    break;
-                case 'normalize.css':
-                    this.userconfig.normalizeCss = this.userconfig.cssResetLib == "normalize.css";
-                    this.userconfig.resetcssLink = './bower_components/normalize-css/normalize.css';
-                    break;
-                default:
-                    this.userconfig.resetcssLink = '';
-            }
-
-            // css lib 
-            this.userconfig.animateCssLink = this.userconfig.animateCss ? './bower_components/animate.css/animate.min.css' : '';
         },
         initJS: function() {
-            // move to bower
-            switch (this.userconfig.jsLib) {
-                case 'jquery':
-                    this.userconfig.jsLibLink = './bower_components/jquery/dist/jquery.min.js';
-                    break;
-                case 'zeptojs':
-                    this.userconfig.jsLibLink = './bower_components/zeptojs/src/zepto.js';
-                    break;
-                default:
-                    // select none 
-                    this.userconfig.jsLibLink = '';
-                    break;
-            }
 
-            // 
-            this.userconfig.jsLink = './assets/js/script.js';
-            this.fs.copyTpl(
-                this.templatePath('./assets/js/js/script.js'),
-                this.destinationPath(this.userconfig.jsLink)
-            );
-
-            // 
-            if (this.userconfig.wxShare) {
+            if (this.userconfig.usePreload) {
                 this.fs.copyTpl(
-                    this.templatePath('./assets/js/js/wx-share.js'),
-                    this.destinationPath('./assets/js/wx-share.js')
+                    this.templatePath('./assets/js/js/preload.js'),
+                    this.destinationPath('./assets/js/preload.js')
                 );
             }
 
-            //
-            this.userconfig.preloadLibLink = './bower_components/html5Preloader.js/js/html5Preloader.js';
-            this.userconfig.preloadLink = './assets/js/preload.js';
-            this.fs.copyTpl(
-                this.templatePath('./assets/js/js/preload.js'),
-                this.destinationPath('./assets/js/preload.js')
-            );
         },
         initImg: function() {
             this.fs.copyTpl(
@@ -221,24 +199,11 @@ module.exports = generators.Base.extend({
 
             this.fs.copyTpl(
                 this.templatePath('index.html'),
-                this.destinationPath('./index.html'), {
-                    title: projectName,
-                    resetcssLink: resetcssLink,
-                    cssLink: cssLink,
-                    animateCssLink: config.animateCssLink,
-                    jsLibLink: jsLibLink,
-                    jsLink: jsLink,
-                    jsWxShare: config.wxShare,
-                    preloadLibLink: config.preloadLibLink,
-                    preloadLink: config.preloadLink
-                }
+                this.destinationPath('./index.html'),
+                config
             );
         },
         initGulp: function() {
-            // this.fs.copyTpl(
-            //     this.templatePath('./gulpfile.js'),
-            //     this.destinationPath('./gulpfile.js')
-            // );
 
             var projectName = this.userconfig.projectName;
             this.fs.copyTpl(
@@ -262,16 +227,8 @@ module.exports = generators.Base.extend({
             var config = this.userconfig;
             this.fs.copyTpl(
                 this.templatePath('./bower.json'),
-                this.destinationPath('./bower.json'), {
-                    projectName: config.projectName,
-                    zeptojs: config.jsLib == 'zeptojs',
-                    jquery: config.jsLib == 'jquery',
-                    pageSwitch: config.pageSwitch,
-                    qjs: config.qjs,
-                    normalizeCss: config.normalizeCss,
-                    resetCss: config.resetCss,
-                    animateCss: config.animateCss
-                }
+                this.destinationPath('./bower.json'),
+                config
             );
         }
     },

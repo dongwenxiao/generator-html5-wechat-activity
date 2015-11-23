@@ -3,3 +3,91 @@
 .loading {}
 
 .screen-rotate-tip {}
+
+
+/* start here */
+
+html,
+body,
+.wrapper,
+#scenes,
+.scene {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: @bgcolor;
+    // font-family: @fonts !important;
+    color: @color;
+}
+
+.transition {
+    transition: 0.8s ease-in-out;
+    transition-property: transform, opacity;
+}
+
+.active .transition {
+    opacity: 1 !important;
+}
+
+#scenes {
+    position: relative;
+    background: @bgcolor;
+}
+
+.scene {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: @bgcolor;
+    z-index: 999;
+}
+
+
+/**
+ * 向上箭头
+ */
+
+.down {
+    position: absolute;
+    left: 50%;
+    bottom: 55px;
+    width: 12px;
+    height: 12px;
+    .contain("../images/down.png");
+    margin-left: -6px;
+    animation: start 1.5s infinite ease-in-out;
+}
+
+@keyframes start {
+    0%,
+    30% {
+        opacity: 0;
+        transform: translate3d(0, 5px, 0)
+    }
+    60% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0)
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -10px, 0)
+    }
+}
+
+
+/**
+ * iphone 4 小屏幕适配
+ */
+
+@media (max-height: 420px) {}

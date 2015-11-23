@@ -3,39 +3,102 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
-	<meta name="format-tetection" content="telephone=no,email=no,address=no">
+	<meta name="format-detection" content="telephone=no,email=no,address=no">
 	<meta name="keywords" content="">
 	<meta name="description" content="">
-	<title><%= title %></title>
+	<title><%= projectName %></title>
 	<!-- build:css assets/css/lib.min.css -->
-	<% if(resetcssLink != ''){%>
-	<link rel="stylesheet" type="text/css" href="<%= resetcssLink %>">
-	<% }%>
 	
-	<% if(animateCssLink != ''){%>
-	<link rel="stylesheet" type="text/css" href="<%= animateCssLink %>">
+	<% if(useResetCss){%>
+	<link rel="stylesheet" type="text/css" href=".//bower_components/HTML5-Reset/assets/css/reset.css">
 	<% }%>
 
-	<link rel="stylesheet" type="text/css" href="<%= cssLink %>">
+	<% if(useNormalizeCss){%>
+	<link rel="stylesheet" type="text/css" href="./bower_components/normalize-css/normalize.css">
+	<% }%>
+	
+	<% if(useAnimateCss){%>
+	<link rel="stylesheet" type="text/css" href="./bower_components/animate.css/animate.min.css">
+	<% }%>
+
+	<link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 	<!-- endbuild -->
+	
+	<% if(useBaiduAnalysis){%>
+	<script>
+	// 百度统计相关代码
+	// 下面URL后的字符串根据情况替换
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?42e24692b3878846cf146a8b3ffaf499";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+	<% }%>
+
 </head>
 <body>
-	<div class="container"></div>
-	<div class="loading"></div>
-	<div class="screen-rotate-tip"></div>
+    <div class="container">
+		<% if(usePageSwitch){%>
+		<!-- pageSwitch part start -->
+        <div id="scenes">
+            <div class="scene scene-0">
+                <div class="demo-txt">第一页</div>
+                <div class="down"></div>
+            </div>
+            <div class="scene scene-1">
+                <div class="demo-txt">第二页</div>
+                <div class="down"></div>
+            </div>
+            <div class="scene scene-2">
+                <div class="demo-txt">第三页</div>
+                <div class="down"></div>
+            </div>
+        </div>
+		<!-- pageSwitch part end -->
+		<% }%>
+    </div>
+
+	<% if(usePreload){%>
+	<!-- 预加载页面 start -->
+    <div class="loading">0%</div>
+    <!-- 预加载页面 end -->
+	<% }%>
+
+	<% if(useScreenRotateTip){%>
+	<!-- 屏幕旋转提示页 start -->
+    <div class="screen-rotate-tip"></div>
+    <!-- 屏幕旋转提示页 end -->
+	<% }%>
+
 </body>
 </html>
 <!-- build:js assets/js/lib.min.js -->
-<%if(jsLibLink != ''){%>
-<script src="<%= jsLibLink %>"></script>
+
+<%if(useZeptoJs){%>
+<script src="./bower_components/zeptojs/src/zepto.js"></script>
 <%}%>
 
-<% if(jsWxShare){ %>
+<%if(useJquery){%>
+<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+<%}%>
+
+<% if(useWxShare){ %>
 <script src="./assets/js/wx-share.js"></script>
 <% }%>
 
-<script src="<%= preloadLibLink %>"></script>
-<script src="<%= preloadLink %>"></script>
-<script src="<%= jsLink %>"></script>
+<% if(usePreload){ %>
+<script src="./bower_components/html5Preloader.js/js/html5Preloader.js"></script>
+<script src="./assets/js/preload.js"></script>
+<% }%>
+
+<% if(usePageSwitch){ %>
+<script src="./bower_components/pageSwitch/src/pageSwitch.js"></script>
+<% }%>
+
+<script src="./assets/js/js/script.js"></script>
 
 <!-- endbuild -->

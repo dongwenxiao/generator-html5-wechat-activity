@@ -19,38 +19,35 @@
     ],
     "dependencies": {
 
-        "html5Preloader.js": "https://github.com/codemonkey-victor/html5Preloader.js.git#cde87ce"
-
-
-        <% if(zeptojs) {%>
-        ,"zeptojs": "~1.1.6"
+        <% if(useZeptoJs) {%>
+        "zeptojs": "~1.1.6"
         <% } %>
 
-        <% if(jquery) {%>
-        ,"jquery": "~2.1.4"
+        <% if(useJquery) {%>
+        "jquery": "~2.1.4"
         <% } %>
 
-        <% if(pageSwitch) { %>
+        <% if(usePageSwitch) { %>
         ,"pageSwitch": "https://github.com/qiqiboy/pageSwitch.git"
         <% } %>
 
-        <% if(qjs) { %>
+        <% if(useQjs) { %>
         ,"qjs": "https://github.com/kriskowal/q.git#1.4.1"
         <% } %>
 
+        <% if(usePreload) {%>
+        "html5Preloader.js": "https://github.com/codemonkey-victor/html5Preloader.js.git#cde87ce"
+        <% } %>
 
-
-
-
-        <% if(normalizeCss) { %>
+        <% if(useNormalizeCss) { %>
         ,"normalize-css": "normalize.css#~3.0.3"
         <% } %>
 
-        <% if(resetCss) { %>
+        <% if(useResetCss) { %>
         ,"HTML5-Reset": "html5-reset#~2.1.3"
         <% } %>
 
-        <% if(animateCss) { %>
+        <% if(useAnimateCss) { %>
         ,"animate.css": "https://github.com/daneden/animate.css.git"
         <% } %>
 
