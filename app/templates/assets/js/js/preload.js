@@ -20,7 +20,8 @@
         }
 
         myLoader.on('finish', function(data) {
-            console.log('All assets loaded.');            
+            console.log('All assets loaded.');
+            updatePregress();
 
             // 资源全部加载完成后回调此方法
             // 此时开始应用逻辑代码
@@ -30,24 +31,24 @@
             callback && callback();
         });
 
-        myLoader.on('error', function(e) {
-            console.error(e);
+        myLoader.on('fileloaded', function(e) {
+            updatePregress();
         });
 
-        var siProgress = setInterval(function() {
-            var preloadRate = myLoader.getProgress();
-            console.log(preloadRate);
-            (preloadRate == 1) && clearInterval(siProgress);
+        myLoader.on('error', function(e) {
+            updatePregress();
+        });
 
+        function updatePregress() {
             // preloadRate 是预加载率，0~1,1表示100%加载完成
             // 用于进度条变化显示
             // TODO: 编写预加载进度条逻辑
+            var preloadRate = myLoader.getProgress();
 
             // eg.
             var loadingEl = doc.getElementsByClassName('loading')[0];
             loadingEl.innerHTML = Math.round(preloadRate * 100) + '%';
-
-        }, 100);
+        }
     }
 
 })(window);

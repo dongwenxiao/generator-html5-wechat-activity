@@ -1,0 +1,61 @@
+
+html,
+body {
+    font-family: Helvetica, HelveticaNeue, 'Droid Sans', Arial, Verdana, serif, 'Heiti SC', Droidsansfallback;
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    outline: none;
+}
+
+a:hover,
+a:active,
+a:focus {
+    color: #fff;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.pull-left {
+    display: inline;
+    float: left;
+}
+
+.pull-right {
+    display: inline;
+    float: right;
+}
+
+.clearfix {
+    font-size: 0;
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\200c';
+}
+
+.clear {
+    zoom: 1;
+}
+
+.clear:after {
+    font-size: 0;
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\200c';
+}
+
+.none {
+    display: none;
+    overflow: hidden;
+}

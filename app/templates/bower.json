@@ -36,7 +36,7 @@
         <% } %>
 
         <% if(usePreload) {%>
-        "html5Preloader.js": "https://github.com/codemonkey-victor/html5Preloader.js.git#cde87ce"
+        ,"html5Preloader.js": "https://github.com/codemonkey-victor/html5Preloader.js.git#cde87ce"
         <% } %>
 
         <% if(useNormalizeCss) { %>

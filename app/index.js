@@ -167,6 +167,18 @@ module.exports = generators.Base.extend({
         },
         initJS: function() {
 
+            this.fs.copyTpl(
+                this.templatePath('./assets/js/js/script.js'),
+                this.destinationPath('./assets/js/script.js')
+            );
+
+            if (this.userconfig.useWxShare) {
+                this.fs.copyTpl(
+                    this.templatePath('./assets/js/js/wx-share.js'),
+                    this.destinationPath('./assets/js/wx-share.js')
+                );
+            }
+
             if (this.userconfig.usePreload) {
                 this.fs.copyTpl(
                     this.templatePath('./assets/js/js/preload.js'),
