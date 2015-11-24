@@ -155,11 +155,10 @@ module.exports = generators.Base.extend({
                 case 'sass':
                     break;
                 case 'css':
-                default:
-                    this.userconfig.cssLink = './assets/css/style.css';
+                default:                    
                     this.fs.copyTpl(
-                        this.templatePath('./assets/css/css/style.css'),
-                        this.destinationPath(this.userconfig.cssLink)
+                        this.templatePath('./assets/css/css/'),
+                        this.destinationPath('./assets/css/')
                     );
                     break;
             }
@@ -207,7 +206,6 @@ module.exports = generators.Base.extend({
                 jsLink = this.userconfig.jsLink;
 
             var config = this.userconfig;
-
 
             this.fs.copyTpl(
                 this.templatePath('index.html'),
